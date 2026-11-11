@@ -1,34 +1,27 @@
-
-package com.bankflow.shared.config;
+package dev.peixoto.bankflow.shared.config;
 
 import org.flywaydb.core.Flyway;
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+
+import javax.sql.DataSource;
 
 @Configuration
 public class FlywayConfig {
 
     @Bean(initMethod = "migrate")
-    public Flyway writeFlyway(
-            @Value("${spring.datasource.write.url}") String url,
-            @Value("${spring.datasource.write.username}") String username,
-            @Value("${spring.datasource.write.password}") String password
-    ) {
+    public Flyway writeFlyway(@Qualifier("writeDataSource") DataSource dataSource) {
         return Flyway.configure()
-                .dataSource(url, username, password)
+                .dataSource(dataSource)
                 .locations("classpath:db/migration/write")
                 .load();
     }
 
     @Bean(initMethod = "migrate")
-    public Flyway readFlyway(
-            @Value("${spring.datasource.read.url}") String url,
-            @Value("${spring.datasource.read.username}") String username,
-            @Value("${spring.datasource.read.password}") String password
-    ) {
+    public Flyway readFlyway(@Qualifier("readDataSource") DataSource dataSource) {
         return Flyway.configure()
-                .dataSource(url, username, password)
+                .dataSource(dataSource)
                 .locations("classpath:db/migration/read")
                 .load();
     }
