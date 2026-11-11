@@ -1,0 +1,32 @@
+spring:
+  application:
+    name: bankflow
+
+  datasource:
+    write:
+      url: jdbc:postgresql://localhost:5432/bankflow_write
+      username: bankflow
+      password: ${POSTGRES_PASSWORD_WRITE}
+      driver-class-name: org.postgresql.Driver
+
+    read:
+      url: jdbc:postgresql://localhost:5433/bankflow_read
+      username: bankflow
+      password: ${POSTGRES_PASSWORD_READ}
+      driver-class-name: org.postgresql.Driver
+
+  jpa:
+    open-in-view: false
+    hibernate:
+      ddl-auto: validate
+    properties:
+      hibernate:
+        format_sql: true
+
+server:
+  port: 8080
+
+logging:
+  level:
+    org.hibernate.SQL: DEBUG
+    org.flywaydb: INFO
